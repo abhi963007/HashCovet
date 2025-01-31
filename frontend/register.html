@@ -1,36 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Auth System</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.3/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
+    <div id="particles-js"></div>
+    <button class="theme-switch" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
     <div class="container">
-        <h1>Register</h1>
-        <form onsubmit="register(event)">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
-            </div>
-            <button type="submit">Register</button>
-            <div id="message"></div>
-            <a href="login.html" class="link">Already have an account? Login</a>
-        </form>
+        <div class="animation-side">
+            <div id="register-animation" style="width: 100%; max-width: 400px;"></div>
+        </div>
+        <div class="form-side">
+            <h1>Create Account</h1>
+            <form onsubmit="register(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Create a password">
+                </div>
+                <button type="submit">Register</button>
+                <div id="message"></div>
+                <a href="login.html" class="link">Already have an account? Login</a>
+            </form>
+        </div>
     </div>
     <script src="js/auth.js"></script>
     <script>
         // Redirect if already logged in
         redirectIfLoggedIn();
+
+        // Initialize Lottie animation with error handling
+        function initAnimation() {
+            const animationConfig = {
+                container: document.getElementById('register-animation'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://lottie.host/f8d8c3c5-a69c-4dd8-8194-b7fbb6aa1823/fE2lj9hWe1.json'
+            };
+
+            let anim = lottie.loadAnimation(animationConfig);
+
+            anim.addEventListener('data_failed', () => {
+                console.log('First animation failed, trying fallback...');
+                // Fallback animation if the first one fails
+                animationConfig.path = 'https://lottie.host/14b2d8cf-3f8b-440b-8d1d-2cff8800b159/YYcmKkeavD.json';
+                anim = lottie.loadAnimation(animationConfig);
+
+                anim.addEventListener('data_failed', () => {
+                    console.log('Fallback animation failed, using static content...');
+                    document.getElementById('register-animation').innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-user-plus" style="font-size: 5rem; color: var(--primary);"></i>
+                            <h2 style="margin-top: 1rem; color: var(--primary);">Create Your Account</h2>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // Initialize animation
+        initAnimation();
+
+        // Theme switcher
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.querySelector('.theme-switch i');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-switch i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        // Initialize particles with theme-aware colors
+        function initParticles() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            particlesJS('particles-js',
+                {
+                    "particles": {
+                        "number": {
+                            "value": 80,
+                            "density": {
+                                "enable": true,
+                                "value_area": 800
+                            }
+                        },
+                        "color": {
+                            "value": isDark ? "#6366f1" : "#4f46e5"
+                        },
+                        "shape": {
+                            "type": "circle"
+                        },
+                        "opacity": {
+                            "value": 0.5,
+                            "random": false
+                        },
+                        "size": {
+                            "value": 3,
+                            "random": true
+                        },
+                        "line_linked": {
+                            "enable": true,
+                            "distance": 150,
+                            "color": isDark ? "#6366f1" : "#4f46e5",
+                            "opacity": 0.4,
+                            "width": 1
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 2,
+                            "direction": "none",
+                            "random": false,
+                            "straight": false,
+                            "out_mode": "out",
+                            "bounce": false
+                        }
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": {
+                                "enable": true,
+                                "mode": "grab"
+                            },
+                            "onclick": {
+                                "enable": true,
+                                "mode": "push"
+                            },
+                            "resize": true
+                        }
+                    },
+                    "retina_detect": true
+                }
+            );
+        }
+
+        // Initialize particles
+        initParticles();
+
+        // Update particles when theme changes
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === "data-theme") {
+                    initParticles();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
     </script>
 </body>
 </html> 

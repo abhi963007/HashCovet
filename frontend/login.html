@@ -1,32 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Auth System</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.3/lottie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 <body>
+    <div id="particles-js"></div>
+    <button class="theme-switch" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
     <div class="container">
-        <h1>Login</h1>
-        <form onsubmit="login(event)">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" required>
-            </div>
-            <button type="submit">Login</button>
-            <div id="message"></div>
-            <a href="register.html" class="link">Don't have an account? Register</a>
-        </form>
+        <div class="animation-side">
+            <div id="login-animation" style="width: 100%; max-width: 400px;"></div>
+        </div>
+        <div class="form-side">
+            <h1>Welcome Back</h1>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit">Login</button>
+                <div id="message"></div>
+                <a href="register.html" class="link">Don't have an account? Register</a>
+            </form>
+        </div>
     </div>
     <script src="js/auth.js"></script>
     <script>
         // Redirect if already logged in
         redirectIfLoggedIn();
+
+        // Initialize Lottie animation with error handling
+        function initAnimation() {
+            const animationConfig = {
+                container: document.getElementById('login-animation'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'https://assets3.lottiefiles.com/packages/lf20_k9wsvzgd.json'
+            };
+
+            let anim = lottie.loadAnimation(animationConfig);
+
+            anim.addEventListener('data_failed', () => {
+                console.log('First animation failed, trying fallback...');
+                // Fallback animation if the first one fails
+                animationConfig.path = 'https://assets5.lottiefiles.com/packages/lf20_mjlh3hcy.json';
+                anim = lottie.loadAnimation(animationConfig);
+
+                anim.addEventListener('data_failed', () => {
+                    console.log('Fallback animation failed, using static content...');
+                    document.getElementById('login-animation').innerHTML = `
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-user-circle" style="font-size: 5rem; color: var(--primary);"></i>
+                            <h2 style="margin-top: 1rem; color: var(--primary);">Welcome Back</h2>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // Initialize animation
+        initAnimation();
+
+        // Theme switcher
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.querySelector('.theme-switch i');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-switch i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        // Initialize particles
+        particlesJS('particles-js',
+            {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#4f46e5"
+                    },
+                    "shape": {
+                        "type": "circle"
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#4f46e5",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    }
+                },
+                "retina_detect": true
+            }
+        );
     </script>
 </body>
 </html> 
