@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Auth System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <div id="protected-content">
+            <p>Loading protected content...</p>
+        </div>
+        <button onclick="logout()" class="logout-btn">Logout</button>
+    </div>
+    <script src="js/auth.js"></script>
+    <script>
+        // Check if user is authenticated
+        requireAuth();
+        // Fetch protected data
+        fetchProtectedData();
+    </script>
+</body>
+</html> 
