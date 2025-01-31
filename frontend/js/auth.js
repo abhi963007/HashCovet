@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000/backend/api';
+const API_BASE_URL = 'http://localhost/hashcovet/backend/api';
 
 // Check if user is logged in
 function isLoggedIn() {
@@ -27,16 +27,21 @@ async function register(event) {
     const password = document.getElementById('password').value;
     const messageDiv = document.getElementById('message');
 
+    console.log('Attempting registration with URL:', `${API_BASE_URL}/register.php`);
+    
     try {
         const response = await fetch(`${API_BASE_URL}/register.php`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ username, email, password })
         });
 
+        console.log('Response status:', response.status);
         const data = await response.json();
+        console.log('Response data:', data);
 
         if (response.ok) {
             messageDiv.className = 'success';
@@ -49,6 +54,7 @@ async function register(event) {
             messageDiv.textContent = data.message;
         }
     } catch (error) {
+        console.error('Registration error:', error);
         messageDiv.className = 'error';
         messageDiv.textContent = 'An error occurred. Please try again.';
     }
