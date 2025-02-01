@@ -1,0 +1,14 @@
+# FUNDING.yml
+# Replace placeholders with actual usernames or URLs
+
+github: [hashcovet]  # Replace with your GitHub username
+patreon: hashcovet   # Replace with your Patreon username
+open_collective: hashcovet  # Replace with your Open Collective username
+ko_fi: hashcovet     # Replace with your Ko-fi username
+tidelift: hashcovet  # Replace with your Tidelift username
+community_bridge: hashcovet  # Replace with your Community Bridge username
+liberapay: hashcovet  # Replace with your Liberapay username
+issuehunt: hashcovet  # Replace with your IssueHunt username
+otechie: hashcovet    # Replace with your Otechie username
+custom:
+  - https://www.hashcovet.com/donate  # Replace with your custom donation URL
